@@ -1,0 +1,71 @@
+{% extends "base.html.jinja" %}
+{% from "macros.html.jinja" import table %}
+
+{% block title %}Главная — VG Sales{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Видео-игры: продажи и справочники</h1>
+<p class="text-muted">
+  Датасет Kaggle: <em>Video Games Sales (as at 22 Dec 2016)</em>.
+  Нормализация: <strong>Publisher/Platform/Genre… → Game → GameSale (Region)</strong>.
+</p>
+
+<div class="row">
+  <div class="col-lg-6">
+    {{ table("Платформы (Platform)", ["id", "code"], platform_rows) }}
+  </div>
+  <div class="col-lg-6">
+    {{ table("Жанры (Genre)", ["id", "name"], genre_rows) }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    {{ table("Издатели (Publisher)", ["id", "name"], publisher_rows) }}
+  </div>
+  <div class="col-lg-6">
+    {{ table("Разработчики (Developer)", ["id", "name"], developer_rows) }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6">
+    {{ table("Рейтинги (Rating)", ["id", "name"], rating_rows) }}
+  </div>
+  <div class="col-lg-6">
+    {{ table("Топ игр (Game)", ["id","name","platform","genre","publisher","global_sales","year"], game_rows) }}
+  </div>
+</div>
+
+{{ table("Продажи (GameSale) — последние", ["id", "game", "region", "sales (M)"], [
+  (s.id, s.game.name, s.region.code, s.sales_millions) for s in sales
+]) }}
+
+<h2 class="mt-5 mb-3">Статистика</h2>
+
+<div class="row">
+  <div class="col-lg-4">
+    {{ table("Топ платформ по Global Sales", ["platform", "total (M)"], [
+      (r["game__platform__code"], ("%.2f"|format(r["total"] or 0))) for r in total_by_platform
+    ]) }}
+  </div>
+  <div class="col-lg-4">
+    {{ table("Топ жанров по Global Sales", ["genre", "total (M)"], [
+      (r["game__genre__name"], ("%.2f"|format(r["total"] or 0))) for r in total_by_genre
+    ]) }}
+  </div>
+  <div class="col-lg-4">
+    {{ table("Топ издателей по Global Sales", ["publisher", "total (M)"], [
+      (r["game__publisher__name"] or "—", ("%.2f"|format(r["total"] or 0))) for r in total_by_publisher
+    ]) }}
+  </div>
+</div>
+
+{{ table("Средняя оценка критиков по жанрам", ["genre", "avg critic score"], [
+  (r["genre__name"], ("%.2f"|format(r["avg"] or 0))) for r in avg_critic_by_genre
+]) }}
+
+<div class="alert alert-info">
+  <strong>CRUD на формах:</strong> перейдите на страницу <a href="{{ url('game_list') }}">Игры (CRUD)</a>.
+</div>
+{% endblock %}

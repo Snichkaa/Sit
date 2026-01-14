@@ -1,0 +1,54 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<h1>VG Sales Dashboard</h1>
+
+<h2>Статистика</h2>
+
+<h3>ТОП-10 жанров по Global Sales</h3>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr><th>Genre</th><th>Total (mln)</th></tr>
+  </thead>
+  <tbody>
+    {% for r in top_genres %}
+      <tr>
+        <td>{{ r["game__genre__name"] }}</td>
+        <td>{{ "%.2f"|format(r["total"]) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>ТОП-10 платформ по Global Sales</h3>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr><th>Platform</th><th>Total (mln)</th></tr>
+  </thead>
+  <tbody>
+    {% for r in top_platforms %}
+      <tr>
+        <td>{{ r["game__platform__name"] }}</td>
+        <td>{{ "%.2f"|format(r["total"]) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Средний Critic Score по жанрам (ТОП-10)</h3>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr><th>Genre</th><th>Avg Critic Score</th></tr>
+  </thead>
+  <tbody>
+    {% for r in avg_critic_by_genre %}
+      <tr>
+        <td>{{ r["genre__name"] }}</td>
+        <td>{{ "%.2f"|format(r["avg_score"]) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p>Открой страницы в меню, чтобы увидеть таблицы для каждой сущности и CRUD для Games.</p>
+{% endblock %}

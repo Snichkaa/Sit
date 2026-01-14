@@ -1,0 +1,17 @@
+{% extends "base.html.jinja" %}
+{% block title %}Удалить игру{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">Удалить игру</h1>
+
+<div class="alert alert-warning">
+  Вы уверены, что хотите удалить: <strong>{{ object.name }}</strong> ({{ object.platform.code }})?
+  <br>Связанные записи GameSale будут удалены каскадно.
+</div>
+
+<form method="post" class="d-flex gap-2">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">Да, удалить</button>
+  <a class="btn btn-outline-secondary" href="{{ url('game_list') }}">Отмена</a>
+</form>
+{% endblock %}

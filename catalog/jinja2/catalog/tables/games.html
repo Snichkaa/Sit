@@ -1,0 +1,30 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<h2>Games</h2>
+<p><a href="{{ url('game_add') }}">Добавить игру</a></p>
+
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Year</th><th>Publisher</th><th>Platform</th><th>Genre</th><th>Rating</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for g in rows %}
+      <tr>
+        <td>{{ g.id }}</td>
+        <td>{{ g.name }}</td>
+        <td>{{ g.year }}</td>
+        <td>{{ g.publisher.name }}</td>
+        <td>{{ g.platform.name }}</td>
+        <td>{{ g.genre.name }}</td>
+        <td>{{ g.age_rating.code if g.age_rating else "" }}</td>
+        <td>
+          <a href="{{ url('game_edit', g.id) }}">edit</a> |
+          <a href="{{ url('game_delete', g.id) }}">delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>VG Sales</title>
+</head>
+<body>
+  <nav>
+    <a href="{{ url('index') }}">Главная</a> |
+    <a href="{{ url('publishers') }}">Publishers</a> |
+    <a href="{{ url('platforms') }}">Platforms</a> |
+    <a href="{{ url('genres') }}">Genres</a> |
+    <a href="{{ url('games') }}">Games</a> |
+    <a href="{{ url('sales') }}">Sales</a>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>

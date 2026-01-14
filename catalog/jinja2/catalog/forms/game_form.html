@@ -1,0 +1,26 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<h2>{% if mode == "create" %}Добавить игру{% else %}Редактировать игру: {{ obj.name }}{% endif %}</h2>
+
+<form method="post">
+  {{ csrf_input(request) }}
+
+  <p>{{ form.name.label }}<br>{{ form.name }}</p>
+  <p>{{ form.year.label }}<br>{{ form.year }}</p>
+
+  <p>{{ form.publisher.label }}<br>{{ form.publisher }}</p>
+  <p>{{ form.platform.label }}<br>{{ form.platform }}</p>
+  <p>{{ form.genre.label }}<br>{{ form.genre }}</p>
+  <p>{{ form.age_rating.label }}<br>{{ form.age_rating }}</p>
+
+  <p>{{ form.developer.label }}<br>{{ form.developer }}</p>
+
+  <p>{{ form.critic_score.label }}<br>{{ form.critic_score }}</p>
+  <p>{{ form.critic_count.label }}<br>{{ form.critic_count }}</p>
+  <p>{{ form.user_score.label }}<br>{{ form.user_score }}</p>
+  <p>{{ form.user_count.label }}<br>{{ form.user_count }}</p>
+
+  <button type="submit">Сохранить</button>
+  <a href="{{ url('games') }}">Назад</a>
+</form>
+{% endblock %}

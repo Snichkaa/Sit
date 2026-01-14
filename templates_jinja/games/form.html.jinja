@@ -1,0 +1,77 @@
+{% extends "base.html.jinja" %}
+{% block title %}{{ "Редактирование" if object else "Добавление" }} игры{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">{{ "Редактирование" if object else "Добавление" }} игры</h1>
+
+<form method="post" class="card">
+  <div class="card-body">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="row g-3">
+      <div class="col-md-8">
+        <label class="form-label">Название</label>
+        {{ form.name }}
+        <div class="text-danger small">{{ form.name.errors }}</div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Год релиза</label>
+        {{ form.year_of_release }}
+        <div class="text-danger small">{{ form.year_of_release.errors }}</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Платформа</label>
+        {{ form.platform }}
+        <div class="text-danger small">{{ form.platform.errors }}</div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Жанр</label>
+        {{ form.genre }}
+        <div class="text-danger small">{{ form.genre.errors }}</div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Издатель</label>
+        {{ form.publisher }}
+        <div class="text-danger small">{{ form.publisher.errors }}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Разработчик</label>
+        {{ form.developer }}
+        <div class="text-danger small">{{ form.developer.errors }}</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Рейтинг</label>
+        {{ form.rating }}
+        <div class="text-danger small">{{ form.rating.errors }}</div>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Оценка критиков</label>
+        {{ form.critic_score }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Кол-во критиков</label>
+        {{ form.critic_count }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Оценка пользователей</label>
+        {{ form.user_score }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Кол-во пользователей</label>
+        {{ form.user_count }}
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a class="btn btn-outline-secondary" href="{{ url('game_list') }}">Отмена</a>
+  </div>
+</form>
+{% endblock %}

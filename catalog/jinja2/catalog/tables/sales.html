@@ -1,0 +1,17 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<h2>Sales</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead><tr><th>ID</th><th>Game</th><th>Region</th><th>Sales (mln)</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.game.name }}</td>
+        <td>{{ r.region.code }}</td>
+        <td>{{ r.sales_millions }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

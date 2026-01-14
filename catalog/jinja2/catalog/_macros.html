@@ -1,0 +1,18 @@
+{% macro table(headers, rows, row_getters) %}
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      {% for h in headers %}<th>{{ h }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr>
+        {% for g in row_getters %}
+          <td>{{ g(r) }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
