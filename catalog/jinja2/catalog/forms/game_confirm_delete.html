@@ -1,10 +1,17 @@
 {% extends "catalog/base.html" %}
+{% block title %}Удалить игру{% endblock %}
+
 {% block content %}
-<h2>Удалить игру</h2>
-<p>Точно удалить: <b>{{ obj.name }}</b>?</p>
-<form method="post">
-  {{ csrf_input(request) }}
-  <button type="submit">Да, удалить</button>
-  <a href="{{ url('games') }}">Отмена</a>
-</form>
+  <h1 class="mb-3">Удалить игру</h1>
+  <div class="alert alert-warning">
+    Вы действительно хотите удалить игру:
+    <strong>{{ obj.name }}</strong>
+    ({{ obj.platform.name }}, {{ obj.year or "" }})?
+  </div>
+
+  <form method="post" class="d-flex gap-2">
+    {{ csrf_input(request) }}
+    <button class="btn btn-danger" type="submit">Да, удалить</button>
+    <a class="btn btn-outline-secondary" href="{{ url('games') }}">Отмена</a>
+  </form>
 {% endblock %}

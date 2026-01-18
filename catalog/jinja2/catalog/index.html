@@ -1,54 +1,80 @@
 {% extends "catalog/base.html" %}
 
+{% block title %}Главная{% endblock %}
+
 {% block content %}
-<h1>VG Sales Dashboard</h1>
+  <h1 class="mb-3">VG Sales — главная</h1>
+  <p class="text-muted">
+    На этой странице — несколько сводок по данным (если в базе есть регион <code>GLOBAL</code>),
+    а также ссылка на CRUD-формы для сущности <strong>Game</strong> (связанной с Publisher/Platform/Genre/AgeRating).
+  </p>
 
-<h2>Статистика</h2>
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Топ жанров по продажам (GLOBAL)</div>
+        <div class="card-body p-0">
+          <table class="table table-striped mb-0">
+            <thead><tr><th>Жанр</th><th class="text-end">Продажи (M)</th></tr></thead>
+            <tbody>
+              {% for r in top_genres %}
+                <tr>
+                  <td>{{ r["game__genre__name"] }}</td>
+                  <td class="text-end">{{ "%.2f"|format(r["total"] or 0) }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="2" class="text-muted">Нет данных</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-<h3>ТОП-10 жанров по Global Sales</h3>
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr><th>Genre</th><th>Total (mln)</th></tr>
-  </thead>
-  <tbody>
-    {% for r in top_genres %}
-      <tr>
-        <td>{{ r["game__genre__name"] }}</td>
-        <td>{{ "%.2f"|format(r["total"]) }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Топ платформ по продажам (GLOBAL)</div>
+        <div class="card-body p-0">
+          <table class="table table-striped mb-0">
+            <thead><tr><th>Платформа</th><th class="text-end">Продажи (M)</th></tr></thead>
+            <tbody>
+              {% for r in top_platforms %}
+                <tr>
+                  <td>{{ r["game__platform__name"] }}</td>
+                  <td class="text-end">{{ "%.2f"|format(r["total"] or 0) }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="2" class="text-muted">Нет данных</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3>ТОП-10 платформ по Global Sales</h3>
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr><th>Platform</th><th>Total (mln)</th></tr>
-  </thead>
-  <tbody>
-    {% for r in top_platforms %}
-      <tr>
-        <td>{{ r["game__platform__name"] }}</td>
-        <td>{{ "%.2f"|format(r["total"]) }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="card mt-3">
+    <div class="card-header">Средняя оценка критиков по жанрам</div>
+    <div class="card-body p-0">
+      <table class="table table-striped mb-0">
+        <thead><tr><th>Жанр</th><th class="text-end">Avg critic score</th></tr></thead>
+        <tbody>
+          {% for r in avg_critic_by_genre %}
+            <tr>
+              <td>{{ r["genre__name"] }}</td>
+              <td class="text-end">{{ "%.2f"|format(r["avg_score"] or 0) }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="2" class="text-muted">Нет данных</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<h3>Средний Critic Score по жанрам (ТОП-10)</h3>
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr><th>Genre</th><th>Avg Critic Score</th></tr>
-  </thead>
-  <tbody>
-    {% for r in avg_critic_by_genre %}
-      <tr>
-        <td>{{ r["genre__name"] }}</td>
-        <td>{{ "%.2f"|format(r["avg_score"]) }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<p>Открой страницы в меню, чтобы увидеть таблицы для каждой сущности и CRUD для Games.</p>
+  <div class="alert alert-info mt-3">
+    CRUD-операции на Django Forms для сущности <strong>Game</strong>:
+    <a href="{{ url('games') }}">перейти к списку</a> →
+    <a href="{{ url('game_add') }}">добавить</a> / отредактировать / удалить.
+  </div>
 {% endblock %}

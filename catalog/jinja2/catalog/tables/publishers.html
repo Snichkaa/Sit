@@ -1,12 +1,33 @@
 {% extends "catalog/base.html" %}
+
+{% block title %}Publishers{% endblock %}
+
 {% block content %}
-<h2>Publishers</h2>
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead><tr><th>ID</th><th>Name</th></tr></thead>
-  <tbody>
-    {% for r in rows %}
-      <tr><td>{{ r.id }}</td><td>{{ r.name }}</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Publishers</h1>
+    <span class="text-muted small">Показано до 5000 строк</span>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="table table-striped table-hover mb-0">
+        <thead>
+          <tr>
+            <th style="width: 90px;">ID</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in rows %}
+            <tr>
+              <td>{{ p.id }}</td>
+              <td>{{ p.name }}</td>
+            </tr>
+          {% else %}
+            <tr><td colspan="2" class="text-muted">Нет данных</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

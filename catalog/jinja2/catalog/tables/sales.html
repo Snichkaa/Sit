@@ -1,17 +1,44 @@
 {% extends "catalog/base.html" %}
+
+{% block title %}Sales{% endblock %}
+
 {% block content %}
-<h2>Sales</h2>
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead><tr><th>ID</th><th>Game</th><th>Region</th><th>Sales (mln)</th></tr></thead>
-  <tbody>
-    {% for r in rows %}
-      <tr>
-        <td>{{ r.id }}</td>
-        <td>{{ r.game.name }}</td>
-        <td>{{ r.region.code }}</td>
-        <td>{{ r.sales_millions }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Sales</h1>
+    <span class="text-muted small">Показано до 5000 строк</span>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead>
+            <tr>
+              <th style="width: 90px;">ID</th>
+              <th>Game</th>
+              <th style="width: 90px;">Region</th>
+              <th style="width: 150px;" class="text-end">Sales (millions)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in rows %}
+              <tr>
+                <td>{{ s.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ s.game.name }}</div>
+                  <div class="text-muted small">
+                    {{ s.game.platform.name }} · {{ s.game.publisher.name }} · {{ s.game.genre.name }}
+                  </div>
+                </td>
+                <td>{{ s.region.code }}</td>
+                <td class="text-end">{{ "%.3f"|format(s.sales_millions or 0) }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="4" class="text-muted">Нет данных</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}

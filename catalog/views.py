@@ -11,7 +11,9 @@ jinja = engines["jinja2"]
 
 def render_jinja(request: HttpRequest, template_name: str, context: dict):
     tmpl = jinja.get_template(template_name)
-    html = tmpl.render(context=context, request=request)
+    # В Jinja2-шаблонах удобнее работать с переменными напрямую,
+    # поэтому раскладываем context в корень.
+    html = tmpl.render({**context, "request": request})
     return HttpResponse(html)
 
 

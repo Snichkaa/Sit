@@ -1,30 +1,65 @@
 {% extends "catalog/base.html" %}
-{% block content %}
-<h2>Games</h2>
-<p><a href="{{ url('game_add') }}">Добавить игру</a></p>
 
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr>
-      <th>ID</th><th>Name</th><th>Year</th><th>Publisher</th><th>Platform</th><th>Genre</th><th>Rating</th><th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for g in rows %}
-      <tr>
-        <td>{{ g.id }}</td>
-        <td>{{ g.name }}</td>
-        <td>{{ g.year }}</td>
-        <td>{{ g.publisher.name }}</td>
-        <td>{{ g.platform.name }}</td>
-        <td>{{ g.genre.name }}</td>
-        <td>{{ g.age_rating.code if g.age_rating else "" }}</td>
-        <td>
-          <a href="{{ url('game_edit', g.id) }}">edit</a> |
-          <a href="{{ url('game_delete', g.id) }}">delete</a>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% block title %}Games{% endblock %}
+
+{% block content %}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0">Games</h1>
+    <a class="btn btn-primary" href="{{ url('game_add') }}">+ Добавить игру</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead>
+            <tr>
+              <th style="width: 90px;">ID</th>
+              <th>Name</th>
+              <th style="width: 90px;" class="text-end">Year</th>
+              <th>Publisher</th>
+              <th>Platform</th>
+              <th>Genre</th>
+              <th>Age rating</th>
+              <th style="width: 110px;" class="text-end">Critic</th>
+              <th style="width: 180px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for g in rows %}
+              <tr>
+                <td>{{ g.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ g.name }}</div>
+                  {% if g.developer %}
+                    <div class="text-muted small">Dev: {{ g.developer }}</div>
+                  {% endif %}
+                </td>
+                <td class="text-end">{{ g.year or "" }}</td>
+                <td>{{ g.publisher.name }}</td>
+                <td>{{ g.platform.name }}</td>
+                <td>{{ g.genre.name }}</td>
+                <td>{{ g.age_rating.code if g.age_rating else "" }}</td>
+                <td class="text-end">
+                  {% if g.critic_score is not none %}
+                    {{ "%.1f"|format(g.critic_score) }}
+                  {% endif %}
+                </td>
+                <td>
+                  <a class="btn btn-sm btn-outline-secondary" href="{{ url('game_edit', kwargs={'pk': g.id}) }}">Редактировать</a>
+                  <a class="btn btn-sm btn-outline-danger" href="{{ url('game_delete', kwargs={'pk': g.id}) }}">Удалить</a>
+                </td>
+              </tr>
+            {% else %}
+              <tr><td colspan="9" class="text-muted">Нет данных</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-muted mt-2 mb-0 small">
+    Примечание: на странице показано до 2000 записей (лимит в view) — это сделано, чтобы браузер не зависал.
+  </p>
 {% endblock %}

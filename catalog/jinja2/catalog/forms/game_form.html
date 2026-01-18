@@ -1,26 +1,51 @@
 {% extends "catalog/base.html" %}
+{% block title %}{% if mode == 'create' %}Добавить игру{% else %}Редактировать игру{% endif %}{% endblock %}
+
 {% block content %}
-<h2>{% if mode == "create" %}Добавить игру{% else %}Редактировать игру: {{ obj.name }}{% endif %}</h2>
+  <h1 class="mb-3">
+    {% if mode == 'create' %}
+      Добавление игры
+    {% else %}
+      Редактирование игры
+    {% endif %}
+  </h1>
 
-<form method="post">
-  {{ csrf_input(request) }}
+  <div class="alert alert-secondary">
+    <strong>Связи:</strong> у игры есть внешние ключи на <code>Publisher</code>, <code>Platform</code>, <code>Genre</code>, <code>AgeRating</code>.
+    В этой форме можно выбрать значения для связанных сущностей.
+  </div>
 
-  <p>{{ form.name.label }}<br>{{ form.name }}</p>
-  <p>{{ form.year.label }}<br>{{ form.year }}</p>
+  <form method="post" class="card p-3">
+    {{ csrf_input(request) }}
 
-  <p>{{ form.publisher.label }}<br>{{ form.publisher }}</p>
-  <p>{{ form.platform.label }}<br>{{ form.platform }}</p>
-  <p>{{ form.genre.label }}<br>{{ form.genre }}</p>
-  <p>{{ form.age_rating.label }}<br>{{ form.age_rating }}</p>
+    {% for field in form %}
+      {% set wname = field.field.widget.__class__.__name__ %}
+      <div class="mb-3">
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {% if wname in ['Select', 'SelectMultiple'] %}
+          {{ field.as_widget(attrs={"class": "form-select"}) }}
+        {% elif field.field.widget.input_type == 'checkbox' %}
+          <div class="form-check">
+            {{ field.as_widget(attrs={"class": "form-check-input"}) }}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          </div>
+        {% else %}
+          {{ field.as_widget(attrs={"class": "form-control"}) }}
+        {% endif %}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">
+            {{ field.errors|join(', ') }}
+          </div>
+        {% endif %}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
 
-  <p>{{ form.developer.label }}<br>{{ form.developer }}</p>
-
-  <p>{{ form.critic_score.label }}<br>{{ form.critic_score }}</p>
-  <p>{{ form.critic_count.label }}<br>{{ form.critic_count }}</p>
-  <p>{{ form.user_score.label }}<br>{{ form.user_score }}</p>
-  <p>{{ form.user_count.label }}<br>{{ form.user_count }}</p>
-
-  <button type="submit">Сохранить</button>
-  <a href="{{ url('games') }}">Назад</a>
-</form>
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+      <a class="btn btn-outline-secondary" href="{{ url('games') }}">Отмена</a>
+    </div>
+  </form>
 {% endblock %}
